@@ -68,7 +68,7 @@ Every tool uses the same workflow:
 * **Section 2, Source.** Each surface comes either from the **selection** (a terrain polyhedron, or 3D points) or from
   a **file**. Points from a file and breaklines/boundaries from the model can be combined.
 * **Create** runs the tool and creates plain Allplan elements in the active drawing file:
-  polyhedra, 3D/2D polylines, texts and fillings. Each Create counts as **one undo step**.
+  polyhedra, 3D/2D polylines, texts and fillings. Each Create should be **one undo step** (please confirm).
 * **ESC** closes the tool. The palette values are remembered for next time.
 
 ### Units and coordinates
