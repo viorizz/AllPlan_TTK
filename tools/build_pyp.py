@@ -115,10 +115,11 @@ def file_options(prefix="", visible=None, with_shift=True):
     return items
 
 
-def source_block(title="2. Terrain source", src="TerrainSource", fil="TerrainFile", label="Terrain", shift=True):
+def source_block(title="2. Terrain source", src="TerrainSource", fil="TerrainFile", label="Terrain", shift=True,
+                 options_visible=None):
     items = [radio(src, f"{label} from", 0, [("Selection in model", 0), ("File (LandXML, XYZ/CSV, ASC, OBJ)", 1)]),
              open_file(fil, f"{label} file", Visible=f"{src} == 1")]
-    items += file_options(visible=f"{src} == 1", with_shift=shift)
+    items += file_options(visible=options_visible or f"{src} == 1", with_shift=shift)
     return expander(f"{src}Exp", title, items)
 
 
@@ -235,7 +236,8 @@ tool("TerrainAnalysis", "Terrain Analysis (slope, aspect, elevation)", "analysis
 
 tool("TerrainCutFill", "Terrain Cut & Fill (volumes)", "cutfill_tool", "CutFillTool", [("Cut & fill", [
     selection_block(["Existing terrain", "Design surface", "Boundary (optional, closed)"]),
-    source_block("2a. Existing terrain source", label="Existing terrain"),
+    source_block("2a. Existing terrain source", label="Existing terrain",
+                 options_visible="TerrainSource == 1 or (CompareMode == 0 and DesignSource == 1)"),
     expander("CompareExp", "2b. Compare with", [
         radio("CompareMode", "Compare with", 0, [("Design surface", 0), ("Reference elevation", 1)]),
         dbl("ReferenceElevation", "Reference elevation (m)", 0.0, Visible="CompareMode == 1"),
@@ -262,7 +264,7 @@ tool("TerrainCutFill", "Terrain Cut & Fill (volumes)", "cutfill_tool", "CutFillT
 
 tool("TerrainProfile", "Terrain Profile & Sections", "profile_tool", "ProfileTool", [("Profile", [
     selection_block(["Terrain (ground)", "Second surface (optional)", "Alignment (polyline)"]),
-    source_block(),
+    source_block(options_visible="TerrainSource == 1 or DesignSource == 1"),
     expander("DesignExp", "2b. Second surface from file (optional)", [
         radio("DesignSource", "Second surface from", 0, [("Selection in model", 0), ("File", 1)]),
         open_file("DesignFile", "Second surface file", Visible="DesignSource == 1"),

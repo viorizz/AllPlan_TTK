@@ -70,13 +70,22 @@ class TerrainTool(BaseInteractor):
         self.palette_service = BuildingElementPaletteService(build_ele_list, build_ele_composite,
                                                              self.build_ele.script_name, control_props_list,
                                                              self.build_ele.pyp_file_name)
+        self.prefill_shift()
         self.on_start()
+        self.set_param(self.RESULT_PARAM, "-")
         self.update_info(refresh=False)
         self.palette_service.show_palette(self.build_ele.pyp_file_name)
         self.start_selection()
 
     def on_start(self) -> None:
         """Hook for subclasses (e.g. prefill parameters from settings)."""
+
+    def prefill_shift(self) -> None:
+        """Use the last coordinate shift (shared by all tools) when the palette has none."""
+        if hasattr(self.build_ele, "ShiftX") and not any(self.shift()):
+            self.set_param("ShiftX", float(settings.get("shift_x", 0.0)))
+            self.set_param("ShiftY", float(settings.get("shift_y", 0.0)))
+            self.set_param("ShiftZ", float(settings.get("shift_z", 0.0)))
 
     # -------------------------------------------------------------- parameters
     def param(self, name: str, default: Any = None) -> Any:
@@ -429,9 +438,17 @@ def make_entry_points(tool_cls):
     def create_preview(build_ele, doc):
         try:
             from CreateElementResult import CreateElementResult  # type: ignore
-            return CreateElementResult()
         except Exception:  # noqa: BLE001
             return ([], [])
+        try:
+            from Utils import LibraryBitmapPreview  # type: ignore
+            png = os.path.join(str(build_ele.pyp_file_path), os.path.splitext(os.path.basename(
+                str(build_ele.pyp_file_name)))[0] + ".png")
+            if os.path.exists(png):
+                return CreateElementResult(LibraryBitmapPreview.create_library_bitmap_preview(png))
+        except Exception as exc:  # noqa: BLE001
+            log.debug(f"library preview not available: {exc}")
+        return CreateElementResult()
 
     def create_element(build_ele, doc):
         try:

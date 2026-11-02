@@ -5,7 +5,7 @@ import os
 
 from ...core import io_formats
 from ...core.tin import TerrainError
-from .. import log, settings
+from .. import log
 from ..tool_base import TerrainTool, ToolOutput
 
 FORMATS = {0: ("LandXML", ".xml"), 1: ("Wavefront OBJ", ".obj"), 2: ("XYZ points", ".xyz"),
@@ -15,12 +15,6 @@ FORMATS = {0: ("LandXML", ".xml"), 1: ("Wavefront OBJ", ".obj"), 2: ("XYZ points
 class ExchangeTool(TerrainTool):
     TITLE = "Terrain Import/Export"
     ROLES = (("terrain", "terrain mesh / points to export"),)
-
-    def on_start(self) -> None:
-        if not any(self.shift()):
-            self.set_param("ShiftX", float(settings.get("shift_x", 0.0)))
-            self.set_param("ShiftY", float(settings.get("shift_y", 0.0)))
-            self.set_param("ShiftZ", float(settings.get("shift_z", 0.0)))
 
     def execute(self) -> ToolOutput:
         tin = self.terrain()

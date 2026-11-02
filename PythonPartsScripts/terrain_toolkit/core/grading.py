@@ -249,8 +249,6 @@ def grade_platform(existing: TIN, spec: PlatformSpec, log=None) -> PlatformResul
     loops = [l for l, closed in lines if closed and len(l) > 3]
     if not loops:
         raise TerrainError("Could not determine the daylight line (is the outline inside the terrain?).")
-    cx = sum(p[0] for p in ring) / len(ring)
-    cy = sum(p[1] for p in ring) / len(ring)
     loops.sort(key=lambda l: abs(geom.polygon_area(l)), reverse=True)
     daylight2 = loops[0]
     daylight3: List[Point3] = []

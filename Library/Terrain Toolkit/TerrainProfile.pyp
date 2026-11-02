@@ -110,7 +110,7 @@
             <Value>m</Value>
             <ValueType>StringComboBox</ValueType>
             <ValueList>m|mm|cm|dm|km|ft|us-ft</ValueList>
-            <Visible>TerrainSource == 1</Visible>
+            <Visible>TerrainSource == 1 or DesignSource == 1</Visible>
           </Parameter>
           <Parameter>
             <Name>FileLayout</Name>
@@ -118,7 +118,7 @@
             <Value>auto</Value>
             <ValueType>StringComboBox</ValueType>
             <ValueList>auto|XYZ|PXYZ|PXYZD|PYXZ|YXZ|PNEZ|PNEZD|PENZ|PENZD|NEZ|ENZ</ValueList>
-            <Visible>TerrainSource == 1</Visible>
+            <Visible>TerrainSource == 1 or DesignSource == 1</Visible>
           </Parameter>
           <Parameter>
             <Name>GridStep</Name>
@@ -127,27 +127,27 @@
             <ValueType>Integer</ValueType>
             <MinValue>1</MinValue>
             <MaxValue>100</MaxValue>
-            <Visible>TerrainSource == 1</Visible>
+            <Visible>TerrainSource == 1 or DesignSource == 1</Visible>
           </Parameter>
           <Parameter>
             <Name>ObjYUp</Name>
             <Text>OBJ file is Y-up</Text>
             <Value>False</Value>
             <ValueType>CheckBox</ValueType>
-            <Visible>TerrainSource == 1</Visible>
+            <Visible>TerrainSource == 1 or DesignSource == 1</Visible>
           </Parameter>
           <Parameter>
             <Name>ShiftInfo</Name>
             <Text>Coordinate shift = real-world coordinates of the Allplan origin (m)</Text>
             <Value></Value>
             <ValueType>Text</ValueType>
-            <Visible>TerrainSource == 1</Visible>
+            <Visible>TerrainSource == 1 or DesignSource == 1</Visible>
           </Parameter>
           <Parameter>
             <Name>ShiftRow</Name>
             <Text>Shift X / Y (m)</Text>
             <ValueType>Row</ValueType>
-            <Visible>TerrainSource == 1</Visible>
+            <Visible>TerrainSource == 1 or DesignSource == 1</Visible>
             <Parameters>
               <Parameter>
                 <Name>ShiftX</Name>
@@ -168,7 +168,7 @@
             <Text>Shift Z (m)</Text>
             <Value>0.0</Value>
             <ValueType>Double</ValueType>
-            <Visible>TerrainSource == 1</Visible>
+            <Visible>TerrainSource == 1 or DesignSource == 1</Visible>
           </Parameter>
         </Parameters>
       </Parameter>

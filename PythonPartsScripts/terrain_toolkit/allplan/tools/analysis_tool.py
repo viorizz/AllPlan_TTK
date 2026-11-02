@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from ...core import analysis, colors
 from ...core.tin import TerrainError
-from .. import geo, log, output
+from .. import log, output
 from ..tool_base import TerrainTool, ToolOutput
 
 KINDS = {0: "Slope (%)", 1: "Slope (degrees)", 2: "Aspect / exposure", 3: "Elevation bands"}

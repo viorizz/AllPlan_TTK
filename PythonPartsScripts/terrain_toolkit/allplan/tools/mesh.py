@@ -16,13 +16,6 @@ class TerrainMeshTool(TerrainTool):
     ROLES = (("terrain", "terrain points / meshes"), ("breaklines", "breaklines (3D lines)"),
              ("boundary", "outer boundary (closed polyline)"), ("holes", "holes / voids (closed polylines)"))
 
-    def on_start(self) -> None:
-        # pre-fill the coordinate shift with the last used one
-        if not any(self.shift()):
-            self.set_param("ShiftX", float(settings.get("shift_x", 0.0)))
-            self.set_param("ShiftY", float(settings.get("shift_y", 0.0)))
-            self.set_param("ShiftZ", float(settings.get("shift_z", 0.0)))
-
     def execute(self) -> ToolOutput:
         pts: List = []
         bls: List = []

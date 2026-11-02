@@ -1,0 +1,101 @@
+plugin:
+  name: Terrain Toolkit
+  UUID: 6f1c9a52-3d2e-4b7a-9c61-2f8e5d4a7b13
+  version: 0.1.0
+  developer: terrain_toolkit
+  default-language: en
+  min-allplan-version: 2026
+
+installation:
+  target-location: USR
+
+tools:
+  - id: terrain-mesh
+    pyp: Library\Terrain Toolkit\TerrainMesh.pyp
+    display-name:
+      en: Terrain Mesh (TIN)
+      de: Gelaendemodell (TIN)
+    icons:
+      small: PythonPartsActionbar\terrain_toolkit\TerrainMesh_24.png
+      large: PythonPartsActionbar\terrain_toolkit\TerrainMesh_128.png
+  - id: terrain-contours
+    pyp: Library\Terrain Toolkit\TerrainContours.pyp
+    display-name:
+      en: Contours
+      de: Hoehenlinien
+    icons:
+      small: PythonPartsActionbar\terrain_toolkit\TerrainContours_24.png
+      large: PythonPartsActionbar\terrain_toolkit\TerrainContours_128.png
+  - id: terrain-analysis
+    pyp: Library\Terrain Toolkit\TerrainAnalysis.pyp
+    display-name:
+      en: Slope / Aspect / Elevation
+      de: Neigung / Exposition / Hoehen
+    icons:
+      small: PythonPartsActionbar\terrain_toolkit\TerrainAnalysis_24.png
+      large: PythonPartsActionbar\terrain_toolkit\TerrainAnalysis_128.png
+  - id: terrain-cutfill
+    pyp: Library\Terrain Toolkit\TerrainCutFill.pyp
+    display-name:
+      en: Cut & Fill
+      de: Auftrag / Abtrag
+    icons:
+      small: PythonPartsActionbar\terrain_toolkit\TerrainCutFill_24.png
+      large: PythonPartsActionbar\terrain_toolkit\TerrainCutFill_128.png
+  - id: terrain-profile
+    pyp: Library\Terrain Toolkit\TerrainProfile.pyp
+    display-name:
+      en: Profile & Sections
+      de: Laengs- / Querprofile
+    icons:
+      small: PythonPartsActionbar\terrain_toolkit\TerrainProfile_24.png
+      large: PythonPartsActionbar\terrain_toolkit\TerrainProfile_128.png
+  - id: terrain-drainage
+    pyp: Library\Terrain Toolkit\TerrainDrainage.pyp
+    display-name:
+      en: Drainage
+      de: Entwaesserung
+    icons:
+      small: PythonPartsActionbar\terrain_toolkit\TerrainDrainage_24.png
+      large: PythonPartsActionbar\terrain_toolkit\TerrainDrainage_128.png
+  - id: terrain-platform
+    pyp: Library\Terrain Toolkit\TerrainPlatform.pyp
+    display-name:
+      en: Platform
+      de: Plattform
+    icons:
+      small: PythonPartsActionbar\terrain_toolkit\TerrainPlatform_24.png
+      large: PythonPartsActionbar\terrain_toolkit\TerrainPlatform_128.png
+  - id: terrain-exchange
+    pyp: Library\Terrain Toolkit\TerrainExchange.pyp
+    display-name:
+      en: Import / Export
+      de: Import / Export
+    icons:
+      small: PythonPartsActionbar\terrain_toolkit\TerrainExchange_24.png
+      large: PythonPartsActionbar\terrain_toolkit\TerrainExchange_128.png
+  - id: terrain-diagnostics
+    pyp: Library\Terrain Toolkit\TerrainDiagnostics.pyp
+    display-name:
+      en: Diagnostics
+      de: Diagnose
+    icons:
+      small: PythonPartsActionbar\terrain_toolkit\TerrainDiagnostics_24.png
+      large: PythonPartsActionbar\terrain_toolkit\TerrainDiagnostics_128.png
+
+task-area:
+  display-name:
+    en: Terrain Toolkit
+    de: Terrain Toolkit
+  layout:
+    - terrain-mesh
+    - terrain-contours
+    - terrain-analysis
+    - ----
+    - terrain-cutfill
+    - terrain-platform
+    - terrain-profile
+    - terrain-drainage
+    - ----
+    - terrain-exchange
+    - terrain-diagnostics

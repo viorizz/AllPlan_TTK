@@ -20,7 +20,7 @@ from __future__ import annotations
 import math
 from collections import deque
 from fractions import Fraction
-from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
+from typing import Iterable, List, Optional, Sequence, Set, Tuple
 
 EPSILON = 2.0 ** -52
 
