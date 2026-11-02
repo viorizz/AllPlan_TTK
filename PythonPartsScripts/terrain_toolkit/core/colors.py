@@ -52,11 +52,11 @@ def ramp(name: str, n: int, reverse: bool = False) -> List[RGB]:
     return list(reversed(cols)) if reverse else cols
 
 
-def diverging(n_neg: int, n_pos: int) -> List[RGB]:
-    """Cut classes (red, darkest first) then fill classes (blue, lightest first)."""
+def diverging(n_neg: int, n_pos: int, n_mid: int = 0) -> List[RGB]:
+    """Cut classes (red, darkest first), neutral classes (light grey), fill classes (blue, lightest first)."""
     neg = sample_ramp(RAMPS["cutfill"][:5], n_neg + 1)[:-1] if n_neg > 0 else []
     pos = sample_ramp(RAMPS["cutfill"][4:], n_pos + 1)[1:] if n_pos > 0 else []
-    return neg + pos
+    return neg + [RAMPS["cutfill"][4]] * n_mid + pos
 
 
 def parse_rgb_list(text: str) -> List[RGB]:
