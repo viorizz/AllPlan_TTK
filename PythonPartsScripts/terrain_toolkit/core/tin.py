@@ -639,7 +639,10 @@ def build_tin(points: Sequence[Sequence[float]],
     if ct.failed_constraints:
         _log(f"WARNING: {len(ct.failed_constraints)} constraint segment(s) could not be enforced "
              f"(crossing breaklines or degenerate geometry).")
-    ct.clip_regions()
+    ct.clip_regions([[(p[0] - ox, p[1] - oy) for p in r] for r, _ in rings])
+    if ct.failed_region:
+        _log(f"NOTE: {ct.failed_region} boundary segment(s) could not be enforced exactly; "
+             "triangles were clipped by their centre point instead.")
     removed = ct.trim_long_edges(max_edge) if max_edge > 0 else 0
     if removed:
         _log(f"Removed {removed} outer triangle(s) with edges longer than {max_edge}.")

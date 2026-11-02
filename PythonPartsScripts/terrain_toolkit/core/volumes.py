@@ -148,7 +148,7 @@ def difference(existing: TIN, design: Optional[TIN] = None, reference_z: Optiona
                     pts.append((hit[1], hit[2]))
 
     span = max(1.0, max(abs(p[0]) for p in pts), max(abs(p[1]) for p in pts))
-    tol = max(1e-6, span * 1e-12)
+    tol = max(1e-4, span * 1e-9)   # merge overlay points closer than 0.1 mm
     uniq, remap = _dedupe([(x, y, 0.0) for x, y in pts], tol)
 
     ox = min(q[0] for q in uniq)
@@ -171,7 +171,9 @@ def difference(existing: TIN, design: Optional[TIN] = None, reference_z: Optiona
             continue
         seen.add(key)
         ct.insert_constraint(a, b)
-    ct.clip_regions()
+    ct.clip_regions([[(x - ox, y - oy) for x, y in bnd]] if bnd is not None else None)
+    if ct.failed_region:
+        _log(f"NOTE: {ct.failed_region} boundary segment(s) not enforced exactly; centroid clipping used.")
     tris = ct.triangles()
 
     # elevations

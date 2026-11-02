@@ -292,3 +292,60 @@ def test_ascii_grid_and_obj(tmp_path):
     io_formats.write_obj(str(o), tin)
     t3 = io_formats.read_obj(str(o))
     assert len(t3.triangles) == len(tin.triangles)
+
+
+# --------------------------------------------------------------------------- robustness
+def _hull_area(xs, ys):
+    pts = sorted(set(zip(xs, ys)))
+
+    def half(points):
+        h = []
+        for p in points:
+            while len(h) >= 2 and geom.orient(h[-2][0], h[-2][1], h[-1][0], h[-1][1], p[0], p[1]) <= 0:
+                h.pop()
+            h.append(p)
+        return h
+    lower = half(pts)
+    upper = half(list(reversed(pts)))
+    return geom.polygon_area(lower[:-1] + upper[:-1])
+
+
+@pytest.mark.parametrize("seed", range(6))
+def test_degenerate_inputs_give_valid_planar_mesh(seed):
+    """Grid points, many collinear points on the outline and on interior lines, near duplicates."""
+    rnd = random.Random(seed)
+    xs, ys = [], []
+    for i in range(0, 41, 2):
+        for j in range(0, 41, 2):
+            xs.append(float(i)); ys.append(float(j))
+    for _ in range(300):  # points exactly on the outline and on the diagonals
+        t = rnd.random() * 40
+        for x, y in ((t, 0.0), (40.0, t), (t, 40.0), (0.0, t), (t, t), (t, 40.0 - t)):
+            xs.append(x); ys.append(y)
+    for _ in range(200):  # near duplicates
+        k = rnd.randrange(len(xs))
+        xs.append(xs[k] + rnd.uniform(-1e-9, 1e-9)); ys.append(ys[k] + rnd.uniform(-1e-9, 1e-9))
+    ct = ConstrainedTriangulation(xs, ys)
+    tris = ct.triangles()
+    area = sum(0.5 * geom.orient(xs[a], ys[a], xs[b], ys[b], xs[c], ys[c]) for a, b, c in tris)
+    assert all(geom.orient(xs[a], ys[a], xs[b], ys[b], xs[c], ys[c]) > 0 for a, b, c in tris)
+    assert area == pytest.approx(_hull_area(xs, ys), rel=1e-9)
+    # constraints along the degenerate diagonals must all succeed
+    pts = list(zip(xs, ys))
+    i0 = pts.index((0.0, 0.0)); i1 = pts.index((40.0, 40.0)); i2 = pts.index((0.0, 40.0)); i3 = pts.index((40.0, 0.0))
+    assert ct.insert_constraint(i0, i1)
+    assert ct.insert_constraint(i2, i3)
+    area2 = sum(0.5 * geom.orient(xs[a], ys[a], xs[b], ys[b], xs[c], ys[c]) for a, b, c in ct.triangles())
+    assert area2 == pytest.approx(area, rel=1e-9)
+
+
+def test_platform_volume_matches_independent_grid_estimate():
+    def f(x, y):
+        return 100.0 + 6.0 * math.exp(-((x - 50) ** 2 + (y - 50) ** 2) / 500.0) + 0.04 * x
+    tin = build_tin(random_points(600, seed=1, f=f))
+    r = grade_platform(tin, PlatformSpec(outline=[(35, 35), (65, 35), (65, 60), (35, 60)], balance=True, cell=0.5))
+    dl = [(p[0], p[1]) for p in r.daylight]
+    assert r.volumes.total_area == pytest.approx(abs(geom.polygon_area(dl)), rel=1e-6)
+    c, fl = volumes.grid_volume(tin, lambda x, y, z: r.design_tin.z_at(x, y), 0.25, boundary=dl)
+    assert r.volumes.cut == pytest.approx(c, rel=0.01)
+    assert r.volumes.fill == pytest.approx(fl, rel=0.01)

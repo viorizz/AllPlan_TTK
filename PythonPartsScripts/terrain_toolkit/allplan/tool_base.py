@@ -206,7 +206,8 @@ class TerrainTool(BaseInteractor):
 
     def update_info(self, refresh: bool = True) -> None:
         if self.ROLES:
-            parts = [f"{label}: {len(self.selected[key])}" for key, label in self.ROLES]
+            parts = [f"{label.split(' (')[0][:1].upper()}{label.split(' (')[0][1:]}: {len(self.selected[key])}"
+                     for key, label in self.ROLES]
             self.set_param(self.INFO_PARAM, " | ".join(parts))
         if refresh:
             self.refresh_palette()
